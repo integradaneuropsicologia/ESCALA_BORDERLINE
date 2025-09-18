@@ -337,7 +337,7 @@ $("#form").addEventListener("submit", async (e)=>{
     await sheetPatchBy(SHEETS.PATIENTS, "cpf", patient.cpf, { [`${CODE}_FEITO`]: "sim", [`${CODE}_FEITO_AT`]: new Date().toISOString() });
 
     // mostra o texto que você pediu e volta
-    setBox("#msg", `Resultado: ${resultado}. Voltando ao portal…`, "ok");
+    setBox("#msg"`. Voltando ao portal…`, "ok");
     clearAutosave();
     setTimeout(goPortalWithToken, 1400);
 
