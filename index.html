@@ -52,7 +52,6 @@
 
 <script>
 // ======== CONFIG ========
-// -> use os mesmos endpoints do BAI
 const SHEETDB_BASE = "https://sheetdb.io/api/v1/8pmdh33s9fvy8";
 const SHEETS = { PATIENTS:"Patients", TOKENS:"LinkTokens", SCORES:"Score_ESCALA_BODERLINE" };
 const CODE = "ESCALA_BODERLINE";
@@ -62,59 +61,21 @@ const PORTAL_URL = "https://integradaneuropsicologia.github.io/formularios/";
 const $ = s => document.querySelector(s);
 const onlyDigits = s => (s||"").replace(/\D+/g,"");
 const qs = k => new URLSearchParams(location.search).get(k) || "";
-const AUTOSAVE_KEY = `BPD10_${qs("token")||"no_token"}`;
+const AUTOSAVE_KEY = `${CODE}_${qs("token")||"no_token"}`;
 
-function setBox(id, text, kind="ok"){
-  const el = $(id); if(!el) return;
-  el.textContent = text;
-  el.className = "msg " + (kind==="ok"?"okbox":kind==="warn"?"warnbox":"errbox");
-  el.style.display = "block";
+function setBox(id, text, kind="ok"){ const el=$(id); if(!el) return;
+  el.textContent=text; el.className="msg "+(kind==="ok"?"okbox":kind==="warn"?"warnbox":"errbox"); el.style.display="block";
 }
 function hideBox(id){ const el=$(id); if(el){ el.style.display="none"; el.textContent=""; } }
-function maskCPF(cpf){
-  const d = onlyDigits(cpf||"");
-  if(d.length!==11) return cpf||"";
-  return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`;
-}
-function fmtDateISO(iso){
-  if(!iso) return "";
-  const [y,m,d] = iso.split("-"); if(!y||!m||!d) return iso;
-  return `${d}/${m}/${y}`;
-}
-async function GET(url, timeoutMs=15000){
-  const ctrl = new AbortController(); const t = setTimeout(()=>ctrl.abort(), timeoutMs);
-  try{ const r=await fetch(url,{signal:ctrl.signal}); if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }
-  finally{ clearTimeout(t); }
-}
-async function POST(url, body, timeoutMs=20000){
-  const ctrl = new AbortController(); const t = setTimeout(()=>ctrl.abort(), timeoutMs);
-  try{
-    const r=await fetch(url,{method:"POST",headers:{ "Content-Type":"application/json" },body:JSON.stringify(body),signal:ctrl.signal});
-    if(!r.ok) throw new Error(await r.text()); return r.json();
-  } finally{ clearTimeout(t); }
-}
-async function PATCH(url, body, timeoutMs=20000){
-  const ctrl = new AbortController(); const t = setTimeout(()=>ctrl.abort(), timeoutMs);
-  try{
-    const r=await fetch(url,{method:"PATCH",headers:{ "Content-Type":"application/json" },body:JSON.stringify(body),signal:ctrl.signal});
-    if(!r.ok) throw new Error(await r.text()); return r.json();
-  } finally{ clearTimeout(t); }
-}
-async function sheetSearch(sheet, params){
-  const usp = new URLSearchParams(params);
-  return GET(`${SHEETDB_BASE}/search?sheet=${encodeURIComponent(sheet)}&${usp.toString()}`);
-}
-async function sheetCreate(sheet, row){
-  return POST(`${SHEETDB_BASE}?sheet=${encodeURIComponent(sheet)}`, { data:[row] });
-}
-async function sheetPatchBy(sheet, column, value, data){
-  return PATCH(`${SHEETDB_BASE}/${encodeURIComponent(column)}/${encodeURIComponent(value)}?sheet=${encodeURIComponent(sheet)}`, { data });
-}
-function goPortalWithToken(){
-  const TOKEN = qs("token");
-  try{ const u = new URL(PORTAL_URL, location.href); u.searchParams.set("token", TOKEN); location.href = u.toString(); }
-  catch(_){ const sep = PORTAL_URL.includes("?") ? "&" : "?"; location.href = PORTAL_URL + sep + "token=" + encodeURIComponent(TOKEN); }
-}
+function maskCPF(cpf){ const d=onlyDigits(cpf||""); if(d.length!==11) return cpf||""; return `${d.slice(0,3)}.${d.slice(3,6)}.${d.slice(6,9)}-${d.slice(9)}`; }
+function fmtDateISO(iso){ if(!iso) return ""; const [y,m,d]=iso.split("-"); return (y&&m&&d)?`${d}/${m}/${y}`:iso; }
+async function GET(url){ const r=await fetch(url); if(!r.ok) throw new Error("HTTP "+r.status); return r.json(); }
+async function POST(url, body){ const r=await fetch(url,{method:"POST",headers:{ "Content-Type":"application/json" },body:JSON.stringify(body)}); if(!r.ok) throw new Error(await r.text()); return r.json(); }
+async function PATCH(url, body){ const r=await fetch(url,{method:"PATCH",headers:{ "Content-Type":"application/json" },body:JSON.stringify(body)}); if(!r.ok) throw new Error(await r.text()); return r.json(); }
+async function sheetSearch(sheet, params){ const usp=new URLSearchParams(params); return GET(`${SHEETDB_BASE}/search?sheet=${encodeURIComponent(sheet)}&${usp.toString()}`); }
+async function sheetCreate(sheet, row){ return POST(`${SHEETDB_BASE}?sheet=${encodeURIComponent(sheet)}`, { data:[row] }); }
+async function sheetPatchBy(sheet, column, value, data){ return PATCH(`${SHEETDB_BASE}/${encodeURIComponent(column)}/${encodeURIComponent(value)}?sheet=${encodeURIComponent(sheet)}`, { data }); }
+function goPortalWithToken(){ const TOKEN=qs("token"); try{ const u=new URL(PORTAL_URL,location.href); u.searchParams.set("token",TOKEN); location.href=u.toString(); }catch(_){ const sep=PORTAL_URL.includes("?")?"&":"?"; location.href=PORTAL_URL+sep+"token="+encodeURIComponent(TOKEN); }}
 
 // ======== ITENS/OPÇÕES ========
 const ITEMS = [
@@ -127,227 +88,90 @@ const ITEMS = [
   "Você frequentemente sente que está perdendo a noção da realidade?",
   "Você tem se sentido cronicamente vazio?",
   "Você já sentiu muitas vezes que não sabe quem você é ou qual sua identidade?",
-  "Você fez esforços desesperados para evitar se sentir abandonado ou ser abandonado (por exemplo, ligou repetidamente para alguém para se assegurar de que ainda se importava, implorou para que não o(a) deixassem, agarrou-se a eles fisicamente)?"
+  "Você fez esforços desesperados para evitar se sentir abandonado ou ser abandonado (por exemplo, ligou repetidamente para alguém para se assegurar de que ainda se importava, implorou para que não o[a] deixassem, agarrou-se a eles fisicamente)?"
 ];
-const CHOICES = [
-  {label:"SIM", value:1},
-  {label:"NÃO", value:0},
-];
-function classif(totalYes){
-  return totalYes <= 4 ? "sem indicativos de borderline" : "indícios de borderline";
-}
+const CHOICES = [{label:"SIM", value:1},{label:"NÃO", value:0}];
+function classif(total){ return total <= 4 ? "sem indicativos de borderline" : "indícios de borderline"; }
 
 // ======== RENDER ========
 function renderQuestions(){
-  const host = $("#qs"); host.innerHTML="";
-
-  // barra de progresso
-  let prog = document.getElementById("bpdProgress");
-  if(!prog){
-    prog = document.createElement("div");
-    prog.id = "bpdProgress";
-    prog.className = "muted";
-    prog.style.margin = "0 0 10px";
-    prog.textContent = "0/10 respondidas";
-    $("#form").insertBefore(prog, host);
-  }
-
-  ITEMS.forEach((text, idx)=>{
-    const qn = String(idx+1).padStart(2,"0");
-    const wrap = document.createElement("div");
-    wrap.className="q";
-    wrap.setAttribute("role","group");
-    wrap.setAttribute("aria-labelledby",`lbl${qn}`);
-
-    wrap.innerHTML = `<h3 id="lbl${qn}">${idx+1}. ${text}</h3>`;
-    const opts = document.createElement("div"); opts.className="opts";
-    CHOICES.forEach(c=>{
-      const id=`q${qn}_${c.value}`;
-      const lab=document.createElement("label"); lab.className="opt";
-      lab.innerHTML = `<input type="radio" name="q${qn}" id="${id}" value="${c.value}" required><span>${c.label}</span>`;
-      opts.appendChild(lab);
-    });
+  const host=$("#qs"); host.innerHTML="";
+  let prog=document.getElementById("bpdProgress");
+  if(!prog){ prog=document.createElement("div"); prog.id="bpdProgress"; prog.className="muted"; prog.style.margin="0 0 10px"; prog.textContent="0/10 respondidas"; $("#form").insertBefore(prog,host); }
+  ITEMS.forEach((text,idx)=>{
+    const qn=String(idx+1).padStart(2,"0");
+    const wrap=document.createElement("div"); wrap.className="q"; wrap.setAttribute("role","group"); wrap.setAttribute("aria-labelledby",`lbl${qn}`);
+    wrap.innerHTML=`<h3 id="lbl${qn}">${idx+1}. ${text}</h3>`;
+    const opts=document.createElement("div"); opts.className="opts";
+    CHOICES.forEach(c=>{ const id=`q${qn}_${c.value}`; const lab=document.createElement("label"); lab.className="opt"; lab.innerHTML=`<input type="radio" name="q${qn}" id="${id}" value="${c.value}" required><span>${c.label}</span>`; opts.appendChild(lab); });
     wrap.appendChild(opts); host.appendChild(wrap);
   });
-
-  host.addEventListener("change", () => {
-    updateProgress();
-    autosaveAnswers();
-  });
+  host.addEventListener("change", ()=>{ const answered=document.querySelectorAll('#qs input[type="radio"]:checked').length; $("#bpdProgress").textContent=`${answered}/10 respondidas`; autosaveAnswers(); });
 }
-function updateProgress(){
-  const answered = Array.from(document.querySelectorAll('#qs input[type="radio"]:checked')).length;
-  const prog = $("#bpdProgress");
-  if(prog) prog.textContent = `${answered}/10 respondidas`;
-}
-function restoreAutosave(){
-  try{
-    const raw = localStorage.getItem(AUTOSAVE_KEY);
-    if(!raw) return;
-    const { answers } = JSON.parse(raw);
-    if(!answers) return;
-    Object.entries(answers).forEach(([qn, val])=>{
-      const el = document.querySelector(`input[name="${qn}"][value="${val}"]`);
-      if(el) el.checked = true;
-    });
-    updateProgress();
-  }catch(_){}
-}
-function autosaveAnswers(){
-  const answers = {};
-  for(let i=1;i<=10;i++){
-    const qn = `q${String(i).padStart(2,"0")}`;
-    const sel = document.querySelector(`input[name="${qn}"]:checked`);
-    if(sel) answers[qn] = Number(sel.value);
-  }
-  localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({ code: CODE, token: qs("token"), answers }));
-}
+function autosaveAnswers(){ const answers={}; for(let i=1;i<=10;i++){ const qn=`q${String(i).padStart(2,"0")}`; const sel=document.querySelector(`input[name="${qn}"]:checked`); if(sel) answers[qn]=Number(sel.value); } localStorage.setItem(AUTOSAVE_KEY, JSON.stringify({code:CODE,token:qs("token"),answers})); }
+function restoreAutosave(){ try{ const raw=localStorage.getItem(AUTOSAVE_KEY); if(!raw) return; const {answers}=JSON.parse(raw)||{}; if(!answers) return; Object.entries(answers).forEach(([qn,val])=>{ const el=document.querySelector(`input[name="${qn}"][value="${val}"]`); if(el) el.checked=true; }); const answered=Object.keys(answers).length; $("#bpdProgress").textContent=`${answered}/10 respondidas`; }catch(_){ } }
 function clearAutosave(){ localStorage.removeItem(AUTOSAVE_KEY); }
 
 // ======== ESTADO ========
-let patient = null, tokenRow = null, CPF = "";
-let startAt = Date.now();
+let patient=null, tokenRow=null, CPF=""; let startAt=Date.now();
 
-// ======== BOOT POR TOKEN ========
+// ======== BOOT ========
 (async function boot(){
   try{
-    const TOKEN = qs("token");
-    if(!TOKEN){ setBox("#alert","Link inválido (sem token). Solicite um novo link.","err"); return; }
-
-    // 1) valida token
-    const trows = await sheetSearch(SHEETS.TOKENS, { token: TOKEN });
-    if(!trows || !trows.length) throw new Error("Token inválido ou expirado.");
-    tokenRow = trows[0];
-    const disabled = String(tokenRow.disabled||"não").toLowerCase()==="sim";
-    const expired  = tokenRow.expires_at && (Date.parse(tokenRow.expires_at) < Date.now());
-    if(disabled || expired) throw new Error("Token desativado/expirado. Peça um novo link.");
-
-    CPF = onlyDigits(tokenRow.cpf||"");
-    if(!CPF) throw new Error("Token sem CPF vinculado.");
-
-    // 2) carrega paciente
-    const prows = await sheetSearch(SHEETS.PATIENTS, { cpf: CPF });
-    if(!prows || !prows.length) throw new Error("Paciente não encontrado.");
-    patient = prows[0];
-
-    // 3) verifica liberação para este paciente (coluna BPD10 = "sim")
-    const allowed = String(patient[CODE]||"").toLowerCase()==="sim";
-    if(!allowed){ setBox("#alert","Este formulário não está liberado para você. Entre em contato com o consultório.","err"); return; }
-
-    // 4) bloqueia se já fez
-    const flagDone = String(patient[`${CODE}_FEITO`]||"").toLowerCase()==="sim";
-    const already = await sheetSearch(SHEETS.SCORES, { cpf: CPF, code: CODE });
-    if(flagDone || (already && already.length)){
-      setBox("#alert","Você já respondeu este formulário. Voltando ao portal…","ok");
-      setTimeout(goPortalWithToken, 1200); return;
-    }
-
-    // 5) render
-    renderPatientInfo();
-    renderQuestions();
-    $("#pacInfo").style.display = "grid";
-    $("#form").style.display = "block";
-    hideBox("#alert");
-    startAt = Date.now();
-    restoreAutosave();
-  }catch(err){
-    console.error(err);
-    setBox("#alert", err.message || "Falha ao abrir o formulário. Tente novamente mais tarde.", "err");
-  }
+    const TOKEN=qs("token"); if(!TOKEN){ setBox("#alert","Link inválido (sem token). Solicite um novo link.","err"); return; }
+    const trows=await sheetSearch(SHEETS.TOKENS,{token:TOKEN}); if(!trows?.length) throw new Error("Token inválido ou expirado.");
+    tokenRow=trows[0]; const disabled=String(tokenRow.disabled||"não").toLowerCase()==="sim"; const expired=tokenRow.expires_at&&(Date.parse(tokenRow.expires_at)<Date.now()); if(disabled||expired) throw new Error("Token desativado/expirado. Peça um novo link.");
+    CPF=onlyDigits(tokenRow.cpf||""); if(!CPF) throw new Error("Token sem CPF vinculado.");
+    const prows=await sheetSearch(SHEETS.PATIENTS,{cpf:CPF}); if(!prows?.length) throw new Error("Paciente não encontrado."); patient=prows[0];
+    const allowed=String(patient[CODE]||"").toLowerCase()==="sim"; if(!allowed){ setBox("#alert","Este formulário não está liberado para você. Entre em contato com o consultório.","err"); return; }
+    const flagDone=String(patient[`${CODE}_FEITO`]||"").toLowerCase()==="sim";
+    const already=await sheetSearch(SHEETS.SCORES,{cpf:CPF,code:CODE});
+    if(flagDone || (already && already.length)){ setBox("#alert","Você já respondeu este formulário. Voltando ao portal…","ok"); setTimeout(goPortalWithToken,1200); return; }
+    renderPatientInfo(); renderQuestions(); $("#pacInfo").style.display="grid"; $("#form").style.display="block"; hideBox("#alert"); startAt=Date.now(); restoreAutosave();
+  }catch(err){ console.error(err); setBox("#alert", err.message || "Falha ao abrir o formulário. Tente novamente mais tarde.", "err"); }
 })();
-
 function renderPatientInfo(){
-  const g = $("#pacInfo"); g.innerHTML="";
-  const info = [
-    ["Nome", patient.nome || "-"],
-    ["CPF", maskCPF(patient.cpf)],
-    ["Nascimento", fmtDateISO(patient.data_nascimento)],
-    ["E-mail", patient.email || "-"],
-    ["WhatsApp", patient.whatsapp || "-"],
-  ];
-  for(const [k,v] of info){
-    const div = document.createElement("div");
-    div.className = "info";
-    div.innerHTML = `<b>${k}</b><div>${v||"-"}</div>`;
-    g.appendChild(div);
-  }
+  const g=$("#pacInfo"); g.innerHTML="";
+  [["Nome",patient.nome||"-"],["CPF",maskCPF(patient.cpf)],["Nascimento",fmtDateISO(patient.data_nascimento)],["E-mail",patient.email||"-"],["WhatsApp",patient.whatsapp||"-"]]
+  .forEach(([k,v])=>{ const d=document.createElement("div"); d.className="info"; d.innerHTML=`<b>${k}</b><div>${v||"-"}</div>`; g.appendChild(d); });
 }
 
-// ======== SUBMIT (trava + rechecagem + resposta) ========
-let sending = false;
-
+// ======== SUBMIT ========
+let sending=false;
 $("#form").addEventListener("submit", async (e)=>{
-  e.preventDefault();
-  if(sending) return;
-  sending = true;
-  hideBox("#msg");
-
-  const btn = $("#btnSubmit");
-  const originalText = btn.textContent;
-  btn.disabled = true; btn.textContent = "Enviando…";
-
+  e.preventDefault(); if(sending) return; sending=true; hideBox("#msg");
+  const btn=$("#btnSubmit"); const originalText=btn.textContent; btn.disabled=true; btn.textContent="Enviando…";
   try{
     if(!patient) throw new Error("Sessão inválida. Recarregue o link.");
-
-    // valida e coleta
-    let totalYes = 0;
-    const answers = {};
-    let firstMissing = null;
-    for(let i=1;i<=10;i++){
-      const qn = `q${String(i).padStart(2,"0")}`;
-      const sel = document.querySelector(`input[name="${qn}"]:checked`);
-      if(!sel){ if(!firstMissing) firstMissing = i; continue; }
-      const v = Number(sel.value);
-      totalYes += v;
-      answers[qn] = v;
-    }
-    if(firstMissing){
-      setBox("#msg", `Responda a questão ${firstMissing}.`, "warn");
-      const target = document.getElementById(`lbl${String(firstMissing).padStart(2,"0")}`);
-      if(target){ target.scrollIntoView({behavior:"smooth", block:"center"}); }
-      sending = false; btn.disabled = false; btn.textContent = originalText; return;
-    }
-
-    // rechecagem anti-duplicidade
-    const again = await sheetSearch(SHEETS.SCORES, { cpf: CPF, code: CODE });
-    if(again && again.length){
-      setBox("#msg","Este formulário já foi enviado anteriormente. Voltando ao portal…","ok");
-      setTimeout(goPortalWithToken, 1000); return;
-    }
-
-    const resultado = classif(totalYes);
-    const durationSec = Math.round((Date.now() - startAt)/1000);
-
-    // salva score (inclui q01..q10 e resultado)
-    const row = {
-      result_id: `${patient.cpf}_${CODE}_${Date.now()}`,
-      token: qs("token"),
-      cpf: patient.cpf,
-      code: CODE,
-      source: "paciente",
-      submitted_at: new Date().toISOString(),
-      total_yes: totalYes,
-      classificacao: resultado, // <- "sem indicativos..." ou "indícios..."
-      duration_sec: durationSec,
-      ...answers
+    let total=0; const answers={}; let firstMissing=null;
+    for(let i=1;i<=10;i++){ const qn=`q${String(i).padStart(2,"0")}`; const sel=document.querySelector(`input[name="${qn}"]:checked`); if(!sel){ if(!firstMissing) firstMissing=i; continue; } const v=Number(sel.value); total+=v; answers[qn]=v; }
+    if(firstMissing){ setBox("#msg", `Responda a questão ${firstMissing}.`, "warn"); document.getElementById(`lbl${String(firstMissing).padStart(2,"0")}`)?.scrollIntoView({behavior:"smooth",block:"center"}); sending=false; btn.disabled=false; btn.textContent=originalText; return; }
+    const again=await sheetSearch(SHEETS.SCORES,{cpf:CPF,code:CODE}); if(again && again.length){ setBox("#msg","Este formulário já foi enviado anteriormente. Voltando ao portal…","ok"); setTimeout(goPortalWithToken,1000); return; }
+    const categoria=classif(total);
+    const durationSec=Math.round((Date.now()-startAt)/1000);
+    const row={
+      result_id:`${patient.cpf}_${CODE}_${Date.now()}`,
+      token:qs("token"),
+      cpf:patient.cpf,
+      code:CODE,
+      source:"paciente",
+      submitted_at:new Date().toISOString(),
+      total,                 // <- número de SIM
+      categoria,             // <- texto (<=4 sem indicativos; >=5 indícios)
+      metrics: JSON.stringify({ answers, duration_sec: durationSec })
     };
-    await sheetCreate(SHEETS.SCORES, row);
-
-    // marca como FEITO
-    await sheetPatchBy(SHEETS.PATIENTS, "cpf", patient.cpf, { [`${CODE}_FEITO`]: "sim", [`${CODE}_FEITO_AT`]: new Date().toISOString() });
-
-    // mostra o texto que você pediu e volta
-    setBox("#msg"`. Voltando ao portal…`, "ok");
+    await sheetCreate(SHEETS.SCORES,row);
+    await sheetPatchBy(SHEETS.PATIENTS,"cpf",patient.cpf,{ [`${CODE}_FEITO`]:"sim", [`${CODE}_FEITO_AT`]:new Date().toISOString() });
     clearAutosave();
-    setTimeout(goPortalWithToken, 1400);
-
+    setBox("#msg","Formulário enviado. Voltando ao portal…","ok");
+    setTimeout(goPortalWithToken,1200);
   }catch(err){
     console.error(err);
     setBox("#msg", err.message || "Falha ao enviar. Tente novamente.", "err");
-    sending = false;
-    btn.disabled = false; btn.textContent = originalText;
+    sending=false; btn.disabled=false; btn.textContent=originalText;
   }
 });
 </script>
+
 </body>
 </html>
