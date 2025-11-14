@@ -5,40 +5,210 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Escala McLean de Triagem para Transtorno de Personalidade Borderline</title>
 <style>
-  :root{--bg:#0f172a;--card:#111827;--line:#1f2937;--text:#e5e7eb;--muted:#94a3b8;--pri:#4f46e5;--ok:#22c55e;--err:#ef4444}
+  :root{
+    --bg:#f3f4f6;
+    --card:#ffffff;
+    --line:#e5e7eb;
+    --text:#0f172a;
+    --muted:#6b7280;
+    --pri:#4f46e5;
+    --ok:#16a34a;
+    --err:#b91c1c;
+    --warn:#f59e0b;
+    --surface:#f9fafb;
+  }
+  [data-theme="dark"]{
+    --bg:#0f172a;
+    --card:#111827;
+    --line:#1f2937;
+    --text:#e5e7eb;
+    --muted:#94a3b8;
+    --pri:#4f46e5;
+    --ok:#22c55e;
+    --err:#ef4444;
+    --warn:#f59e0b;
+    --surface:#0b1220;
+  }
+
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    transition:background .2s ease,color .2s ease;
+  }
   .wrap{max-width:960px;margin:24px auto;padding:0 16px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+    box-shadow:0 18px 40px rgba(15,23,42,.15);
+  }
+
+  .header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:12px;
+    margin-bottom:6px;
+  }
+  .header-main{flex:1 1 auto}
   h1{margin:0 0 6px;font-size:1.35rem}
   .muted{color:var(--muted)}
-  .grid-info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 6px}
+
+  .theme-btn{
+    align-self:flex-start;
+    padding:8px 12px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--text);
+    font-size:.85rem;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    white-space:nowrap;
+  }
+  .theme-btn:hover{background:var(--surface)}
+
+  @media(max-width:720px){
+    .header{flex-direction:column-reverse;align-items:flex-start}
+  }
+
+  .grid-info{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:12px 0 6px
+  }
   @media(max-width:720px){.grid-info{grid-template-columns:1fr}}
-  .info{background:#0b1220;border:1px solid var(--line);border-radius:10px;padding:10px}
-  .info b{display:block;margin-bottom:4px;color:#cbd5e1}
-  .q{border:1px solid var(--line);border-radius:12px;padding:12px;background:#0b1220}
+  .info{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:10px
+  }
+  .info b{
+    display:block;
+    margin-bottom:4px;
+    color:var(--muted);
+    font-size:.8rem;
+    text-transform:uppercase;
+    letter-spacing:.03em;
+  }
+
+  .q{
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:12px;
+    background:var(--surface);
+  }
   .q h3{margin:0 0 8px;font-size:1rem}
   .opts{display:flex;flex-wrap:wrap;gap:10px}
-  .opt{display:flex;align-items:center;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:10px}
-  .btn{display:inline-flex;align-items:center;gap:8px;background:var(--pri);border:none;color:#fff;padding:10px 14px;border-radius:10px;cursor:pointer}
+  .opt{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:8px 10px;
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:transparent;
+    cursor:pointer;
+    transition:background .15s ease,border-color .15s ease,transform .05s ease;
+  }
+  .opt:hover{
+    background:rgba(79,70,229,0.06);
+    border-color:#4f46e5;
+    transform:translateY(-1px);
+  }
+  .opt input{
+    appearance:none;
+    -webkit-appearance:none;
+    width:0;height:0;
+    position:absolute;
+    opacity:0;
+  }
+  .opt span{font-weight:600}
+  .opt:has(input:checked){
+    background:rgba(79,70,229,0.10);
+    border-color:#4f46e5;
+    box-shadow:0 0 0 1px #4f46e5 inset;
+  }
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--pri);
+    border:none;
+    color:#fff;
+    padding:10px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+  }
   .btn.ok{background:var(--ok)}
   .btn:disabled{opacity:.6;cursor:not-allowed}
+
   .msg{margin:10px 0;padding:10px;border-radius:8px}
-  .okbox{background:#052e1a;border:1px solid #114d2a;color:#b3f7c1}
-  .errbox{background:#3b0d0d;border:1px solid #5b1919;color:#ffd0d0}
-  .warnbox{background:#3a2903;border:1px solid #5c4307;color:#ffe6b0}
+  .okbox{
+    background:#ecfdf3;
+    border:1px solid #bbf7d0;
+    color:#166534;
+  }
+  .errbox{
+    background:#fef2f2;
+    border:1px solid #fecaca;
+    color:#7f1d1d;
+  }
+  .warnbox{
+    background:#fffbeb;
+    border:1px solid #fef3c7;
+    color:#92400e;
+  }
+  [data-theme="dark"] .okbox{
+    background:#052e1a;
+    border-color:#114d2a;
+    color:#b3f7c1;
+  }
+  [data-theme="dark"] .errbox{
+    background:#3b0d0d;
+    border-color:#5b1919;
+    color:#ffd0d0;
+  }
+  [data-theme="dark"] .warnbox{
+    background:#3a2903;
+    border-color:#5c4307;
+    color:#ffe6b0;
+  }
+
+  #bpdProgress{
+    margin:0 0 10px;
+    font-size:.9rem;
+  }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="card">
-    <h1>Triagem para Transtorno de Personalidade Borderline</h1>
-    <p class="muted">Responda com base em como você tem se sentido e agido <strong>recentemente</strong>.</p>
+    <div class="header">
+      <div class="header-main">
+        <h1>Triagem para Transtorno de Personalidade Borderline</h1>
+        <p class="muted">Responda com base em como você tem se sentido e agido <strong>recentemente</strong>.</p>
+      </div>
+      <button id="themeToggle" class="theme-btn" type="button">🌙 Modo escuro</button>
+    </div>
 
     <!-- Dados do paciente (por token) -->
     <div id="pacInfo" class="grid-info" style="display:none;"></div>
 
     <form id="form" style="margin-top:14px; display:none;">
+      <div id="bpdProgress" class="muted">0/10 respondidas</div>
       <div id="qs"></div>
       <div style="margin-top:14px">
         <button id="btnSubmit" class="btn ok" type="submit">Enviar respostas</button>
@@ -57,6 +227,40 @@ const SHEETS = { PATIENTS:"Patients", TOKENS:"LinkTokens", SCORES:"Scores_ESCALA
 const CODE = "ESCALA_BORDERLINE";
 const PORTAL_URL = "https://integradaneuropsicologia.github.io/formularios/";
 const RELEASE_KEYS = ["ESCALA_BORDERLINE"]; // colunas de liberação no Patients com valor "sim"
+
+/* ========= THEME (CLARO/ESCURO) ========= */
+const THEME_KEY = `${CODE}_THEME`;
+
+function applyTheme(theme){
+  document.documentElement.setAttribute("data-theme", theme);
+  const btn = document.querySelector("#themeToggle");
+  if(btn){
+    btn.textContent = theme === "dark" ? "☀️ Modo claro" : "🌙 Modo escuro";
+  }
+}
+function initTheme(){
+  let theme = "dark"; // mantém padrão escuro que você já usava
+  try{
+    const saved = localStorage.getItem(THEME_KEY);
+    if(saved === "dark" || saved === "light") theme = saved;
+  }catch(_){}
+  applyTheme(theme);
+
+  const btn = document.querySelector("#themeToggle");
+  if(btn){
+    btn.addEventListener("click", ()=>{
+      const current = document.documentElement.getAttribute("data-theme") || "dark";
+      const next = current === "dark" ? "light" : "dark";
+      applyTheme(next);
+      try{ localStorage.setItem(THEME_KEY, next); }catch(_){}
+    });
+  }
+}
+if(document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", initTheme);
+} else {
+  initTheme();
+}
 
 /* ========= HELPERS ========= */
 const $ = s => document.querySelector(s);
@@ -157,17 +361,6 @@ function classif(total){
 function renderQuestions(){
   const host=$("#qs"); host.innerHTML="";
 
-  // pequeno "progresso: x/10"
-  let prog=document.getElementById("bpdProgress");
-  if(!prog){
-    prog=document.createElement("div");
-    prog.id="bpdProgress";
-    prog.className="muted";
-    prog.style.margin="0 0 10px";
-    prog.textContent="0/10 respondidas";
-    $("#form").insertBefore(prog,host);
-  }
-
   ITEMS.forEach((text,idx)=>{
     const qn=String(idx+1).padStart(2,"0");
 
@@ -237,19 +430,28 @@ function clearAutosave(){
   try{ localStorage.removeItem(AUTOSAVE_KEY); }catch(_){}
 }
 
-/* ========= TEXTO LEGÍVEL (pergunta => resposta) ========= */
-function collectQuestionsAnswers(){
+/* ========= QUESTIONS JSON ========= */
+function collectQuestionsAnswersJSON(){
   const out=[];
   ITEMS.forEach((txt, idx)=>{
-    const qn=`q${String(idx+1).padStart(2,"0")}`;
+    const i = idx+1;
+    const qn=`q${String(i).padStart(2,"0")}`;
     const sel=document.querySelector(`input[name="${qn}"]:checked`);
-    let human="—";
+    let value=null;
+    let label="";
     if(sel){
-      human = Number(sel.value)===1 ? "SIM" : "NÃO";
+      value = Number(sel.value);
+      label = value===1 ? "SIM" : "NÃO";
     }
-    out.push(`${idx+1}. ${txt} => ${human}`);
+    out.push({
+      id: i,
+      code: qn,
+      text: txt,
+      value,
+      label
+    });
   });
-  return out.join("\n");
+  return out;
 }
 
 /* ========= ESTADO ========= */
@@ -391,9 +593,6 @@ $("#form").addEventListener("submit", async (e)=>{
     // duração
     const durationSec = Math.round((Date.now()-startAt)/1000);
 
-    // texto pergunta => resposta para laudo
-    const questionsStr = collectQuestionsAnswers();
-
     // métricas extras
     const max_total = ITEMS.length;
     const metricsObj = {
@@ -405,6 +604,9 @@ $("#form").addEventListener("submit", async (e)=>{
       duration_sec: durationSec
     };
 
+    // perguntas + respostas em JSON estruturado
+    const questionsArr = collectQuestionsAnswersJSON();
+
     // grava linha no Scores
     await sheetCreate(SHEETS.SCORES, {
       result_id: `${patient.cpf}_${CODE}_${Date.now()}`,
@@ -413,10 +615,10 @@ $("#form").addEventListener("submit", async (e)=>{
       code: CODE,
       source: "paciente",
       submitted_at: new Date().toISOString(),
-      total: totalYes,             // nº de "SIM"
-      categoria: categoria,        // texto clínico curto
+      total: "",                         // nº de "SIM"
+      categoria: categoria,                    // texto clínico curto
       metrics: "",
-      questions: questionsStr      // perguntas + respostas legíveis
+      questions: JSON.stringify(questionsArr)
     });
 
     // marca como feito no Patients
@@ -425,7 +627,7 @@ $("#form").addEventListener("submit", async (e)=>{
       if(k in patient) doneUpdates[k] = "sim";
     });
     if(Object.keys(doneUpdates).length===0){
-      doneUpdates[`${RELEASE_KEYS[0]}_FEITO`] = "sim";
+      doneUpdates[`${RELEASE_KEYS[0]}__FEITO`] = "sim";
     }
     await sheetPatchBy(SHEETS.PATIENTS,"cpf",patient.cpf,doneUpdates);
 
