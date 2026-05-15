@@ -282,29 +282,496 @@ const YNP     = ["Sim","Não","Não sei"];
 
 
 const QUESTIONS = [
+  {
+    type:"radio",
+    section:"Início, Persistência e Contexto",
+    text:"Você apresenta, há vários anos, medo intenso de ser abandonado, rejeitado ou deixado por pessoas importantes para você?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Início, Persistência e Contexto",
+    text:"Desde o fim da adolescência ou início da vida adulta, você percebe instabilidade frequente nos seus relacionamentos, nas suas emoções, na sua autoimagem ou nos seus impulsos?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Início, Persistência e Contexto",
+    text:"Seu medo de abandono, suas mudanças emocionais intensas ou suas reações impulsivas aparecem em diferentes contextos, como família, amizades, trabalho e relacionamentos afetivos?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Início, Persistência e Contexto",
+    text:"Seu medo de abandono, suas mudanças emocionais intensas ou suas reações impulsivas já causaram conflitos, afastamentos, término de relações, prejuízo no trabalho ou sofrimento importante?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Início, Persistência e Contexto",
+    text:"Pessoas próximas já disseram que você costuma reagir de forma muito intensa a rejeição, críticas, afastamentos, frustrações ou conflitos?",
+    options:YNP
+  },
 
- { type:"radio", text:"Algum de seus relacionamentos foi problemático, com muitas discussões ou separações frequentes?", options: YESNO },
+  {
+    type:"radio",
+    section:"Medo de Abandono",
+    text:"Você fica muito angustiado quando percebe que alguém importante pode se afastar, mesmo que não exista uma ameaça clara de abandono?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Medo de Abandono",
+    text:"Você interpreta atrasos, mudanças de tom, demora para responder mensagens ou menor demonstração de afeto como sinais de rejeição ou abandono?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Medo de Abandono",
+    text:"Quando teme ser abandonado, você liga repetidamente, envia muitas mensagens, insiste em conversar ou busca garantias de que a pessoa ainda se importa com você?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Medo de Abandono",
+    text:"Quando teme ser abandonado, você implora, ameaça terminar, ameaça se machucar, faz cobranças intensas ou tenta impedir que a pessoa se afaste?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Medo de Abandono",
+    text:"Você sente desespero, raiva, pânico ou vazio intenso quando alguém importante se distancia emocionalmente de você?",
+    options:FREQ5
+  },
 
-  { type:"radio", text:"Você se machucou fisicamente de forma deliberada (por exemplo, deu um soco em si mesmo, se cortou, se queimou ou tentou suicídio)?", options: YESNO },
+  {
+    type:"radio",
+    section:"Relacionamentos Instáveis",
+    text:"Seus relacionamentos afetivos, familiares ou de amizade costumam ser intensos, instáveis e marcados por muitas brigas, rupturas ou reconciliações?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Relacionamentos Instáveis",
+    text:"Você costuma alternar entre admirar muito uma pessoa e depois se decepcionar intensamente com ela?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Relacionamentos Instáveis",
+    text:"Você costuma sentir que uma pessoa é muito importante para você e, depois de uma frustração, passa a vê-la como fria, injusta, má ou decepcionante?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Relacionamentos Instáveis",
+    text:"Seus relacionamentos costumam ter mudanças rápidas entre proximidade intensa, dependência, raiva, afastamento e tentativa de reconciliação?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Relacionamentos Instáveis",
+    text:"Você já terminou, bloqueou, afastou-se ou rompeu relações importantes impulsivamente durante momentos de raiva, medo ou sensação de rejeição?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Relacionamentos Instáveis",
+    text:"Pessoas próximas já disseram que é difícil prever suas reações dentro dos relacionamentos?",
+    options:FREQ5
+  },
 
-  { type:"radio", text:"Você já teve pelo menos dois outros problemas com impulsividade (por exemplo, comer compulsivamente, gastar muito, beber demais, explosões verbais)?", options: YESNO},
+  {
+    type:"radio",
+    section:"Autoimagem e Identidade",
+    text:"Você sente, com frequência, que não sabe claramente quem você é, o que quer da vida ou qual é sua identidade?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Autoimagem e Identidade",
+    text:"Sua visão sobre você mesmo muda muito, alternando entre sentir-se uma pessoa boa, capaz ou especial e depois sentir-se ruim, inútil, defeituosa ou sem valor?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Autoimagem e Identidade",
+    text:"Seus objetivos, valores, planos, estilo de vida, escolhas profissionais ou visão sobre relacionamentos mudam de forma intensa e instável?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Autoimagem e Identidade",
+    text:"Você muda muito seu comportamento, opiniões ou forma de se apresentar dependendo da pessoa com quem está se relacionando?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Autoimagem e Identidade",
+    text:"Você sente que depende muito da validação, presença ou aprovação de outra pessoa para se sentir inteiro, seguro ou com valor?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Autoimagem e Identidade",
+    text:"Você sente confusão frequente sobre seus próprios sentimentos, necessidades, limites ou escolhas pessoais?",
+    options:FREQ5
+  },
 
-  { type:"radio", text:"Você tem estado muito mal-humorado?", options: YESNO },
+  {
+    type:"radio",
+    section:"Impulsividade",
+    text:"Você age impulsivamente em pelo menos duas áreas da vida, como gastos, sexo, alimentação, direção, uso de substâncias, brigas, decisões ou rompimentos?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Impulsividade",
+    text:"Você já fez compras, gastos ou dívidas por impulso e depois se arrependeu ou teve prejuízo financeiro?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Impulsividade",
+    text:"Você já teve episódios de comer compulsivamente, com sensação de perda de controle e arrependimento depois?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Impulsividade",
+    text:"Você já teve comportamento sexual impulsivo, arriscado ou usado para aliviar vazio, raiva, rejeição ou sofrimento emocional?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Impulsividade",
+    text:"Você já dirigiu de forma arriscada, agressiva ou impulsiva quando estava com raiva, angustiado ou emocionalmente alterado?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Impulsividade",
+    text:"Você já usou álcool, drogas, medicações ou outras substâncias de forma impulsiva para aliviar emoções intensas?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Impulsividade",
+    text:"Você costuma tomar decisões importantes no impulso, durante crises emocionais, e depois se arrepender?",
+    options:FREQ5
+  },
 
-  { type:"radio", text:"Você já sentiu muita raiva muitas vezes, agindo de maneira explosiva ou sarcástica?", options: YESNO },
+  {
+    type:"radio",
+    section:"Autoagressão e Suicidalidade",
+    text:"Você já se machucou de propósito, como se cortar, se queimar, se bater, se arranhar ou provocar dor física em si mesmo?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Autoagressão e Suicidalidade",
+    text:"Você já fez ameaças de suicídio, gestos suicidas ou tentativa de suicídio durante momentos de rejeição, abandono, raiva, vazio ou desespero?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Autoagressão e Suicidalidade",
+    text:"Você já pensou em se matar quando se sentiu abandonado, rejeitado, humilhado ou emocionalmente sem saída?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Autoagressão e Suicidalidade",
+    text:"Você já usou ameaça de se machucar ou morrer para tentar impedir que alguém se afastasse?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Autoagressão e Suicidalidade",
+    text:"Você já se machucou ou pensou em se machucar para aliviar dor emocional, raiva, culpa, vazio ou sensação de abandono?",
+    options:YNP
+  },
 
-  { type:"radio", text: "Você costuma desconfiar de outras pessoas?", options: YESNO },
+  {
+    type:"radio",
+    section:"Instabilidade Afetiva",
+    text:"Seu humor muda de forma intensa em poucas horas, principalmente após rejeição, crítica, frustração, conflito ou sensação de abandono?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Instabilidade Afetiva",
+    text:"Você alterna rapidamente entre tristeza, raiva, ansiedade, vergonha, vazio, culpa ou desespero ao longo do mesmo dia?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Instabilidade Afetiva",
+    text:"Suas emoções costumam ser muito intensas e difíceis de controlar quando algo acontece em seus relacionamentos?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Instabilidade Afetiva",
+    text:"Você demora para se acalmar depois de uma crise emocional causada por briga, rejeição, crítica ou frustração?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Instabilidade Afetiva",
+    text:"Você sente que pequenas situações podem provocar reações emocionais muito fortes em você?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Instabilidade Afetiva",
+    text:"Depois de uma reação emocional intensa, você costuma sentir culpa, vergonha ou arrependimento pela forma como agiu?",
+    options:FREQ5
+  },
 
-  { type:"radio", text: "Você frequentemente sente que está perdendo a noção da realidade?", options: YESNO },
+  {
+    type:"radio",
+    section:"Vazio Crônico",
+    text:"Você sente vazio interno frequente, como se faltasse algo dentro de você mesmo quando nada grave está acontecendo?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Vazio Crônico",
+    text:"Você sente tédio, falta de sentido ou sensação de estar incompleto de forma recorrente?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Vazio Crônico",
+    text:"Você busca pessoas, conflitos, compras, comida, sexo, substâncias ou emoções fortes para aliviar uma sensação interna de vazio?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Vazio Crônico",
+    text:"Mesmo quando está acompanhado, você sente solidão intensa, vazio ou sensação de não ser realmente importante para ninguém?",
+    options:FREQ5
+  },
 
-  { type:"radio", text:"Você tem se sentido cronicamente vazio?", options: YESNO },
+  {
+    type:"radio",
+    section:"Raiva Intensa",
+    text:"Você sente raiva intensa e difícil de controlar quando se sente rejeitado, criticado, contrariado, ignorado ou injustiçado?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Raiva Intensa",
+    text:"Durante crises de raiva, você grita, xinga, humilha, ironiza, ameaça, bloqueia, termina relações ou age de forma explosiva?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Raiva Intensa",
+    text:"Sua raiva costuma ser mais intensa do que a situação justificaria, segundo pessoas próximas?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Raiva Intensa",
+    text:"Você tem dificuldade para controlar sarcasmo, frieza, desprezo, acusações ou agressividade verbal quando está irritado?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Raiva Intensa",
+    text:"Depois de explodir de raiva, você costuma se arrepender, sentir culpa ou tentar reparar o que aconteceu?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Raiva Intensa",
+    text:"Você já quebrou objetos, bateu portas, empurrou, agrediu ou ameaçou alguém durante crises de raiva?",
+    options:FREQ5
+  },
 
-  { type:"radio", text:"Você já sentiu muitas vezes que não sabe quem você é ou qual sua identidade?", options: YESNO },
+  {
+    type:"radio",
+    section:"Paranoia ou Dissociação Relacionada ao Estresse",
+    text:"Durante situações de estresse, rejeição, conflito ou medo de abandono, você já sentiu que as pessoas estavam contra você, tentando prejudicá-lo ou escondendo algo de você?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Paranoia ou Dissociação Relacionada ao Estresse",
+    text:"Durante crises emocionais, você já desconfiou intensamente de alguém sem ter provas claras e depois percebeu que poderia ter exagerado?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Paranoia ou Dissociação Relacionada ao Estresse",
+    text:"Durante estresse intenso, você já sentiu como se estivesse fora do próprio corpo, distante da realidade ou como se as coisas ao redor não parecessem reais?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Paranoia ou Dissociação Relacionada ao Estresse",
+    text:"Durante crises emocionais, você já teve lapsos de memória, sensação de desligamento ou dificuldade de lembrar claramente do que fez ou falou?",
+    options:FREQ5
+  },
+  {
+    type:"radio",
+    section:"Paranoia ou Dissociação Relacionada ao Estresse",
+    text:"Essas sensações de desconfiança extrema, desligamento ou perda de noção da realidade aparecem principalmente em momentos de estresse intenso?",
+    options:YNP
+  },
 
-  { type:"radio", text: "Você fez esforços desesperados para evitar se sentir abandonado ou ser abandonado (por exemplo, ligou repetidamente para alguém para se assegurar de que ainda se importava, implorou para que não o[a] deixassem, agarrou-se a eles fisicamente)?", options: YESNO }
- 
+  {
+    type:"radio",
+    section:"Prejuízo Funcional",
+    text:"Seu medo de abandono, instabilidade emocional, impulsividade ou raiva intensa já prejudicou relacionamentos amorosos?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Prejuízo Funcional",
+    text:"Seu medo de abandono, instabilidade emocional, impulsividade ou raiva intensa já prejudicou amizades ou relações sociais?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Prejuízo Funcional",
+    text:"Seu medo de abandono, instabilidade emocional, impulsividade ou raiva intensa já prejudicou sua relação com familiares?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Prejuízo Funcional",
+    text:"Seu medo de abandono, instabilidade emocional, impulsividade ou raiva intensa já prejudicou trabalho, estudos, produtividade ou relação com colegas?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Prejuízo Funcional",
+    text:"Qual é a gravidade do prejuízo causado por medo de abandono, instabilidade emocional, impulsividade, vazio, raiva intensa ou relacionamentos instáveis na sua vida?",
+    options:SEVER4
+  },
+
+  {
+    type:"radio",
+    section:"Diferencial com Transtorno Bipolar",
+    text:"Suas mudanças de humor duram principalmente minutos ou horas e costumam acontecer após rejeição, crítica, conflito ou frustração interpessoal?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com Transtorno Bipolar",
+    text:"Você já teve períodos de vários dias com energia muito aumentada, sono reduzido sem cansaço, fala acelerada, impulsividade aumentada e sensação de estar muito acima do normal?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com Transtorno Bipolar",
+    text:"Sua impulsividade, irritabilidade ou sensação de intensidade emocional acontece apenas em fases de humor elevado, aceleração ou redução da necessidade de sono?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com Transtorno Bipolar",
+    text:"Mesmo quando seu humor está estável, você continua apresentando medo de abandono, instabilidade nos relacionamentos, vazio, raiva intensa ou impulsividade?",
+    options:YNP
+  },
+
+  {
+    type:"radio",
+    section:"Diferencial com TDAH",
+    text:"Sua impulsividade aparece desde a infância junto com desatenção, desorganização, inquietação e dificuldade de esperar a vez?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com TDAH",
+    text:"Sua impulsividade costuma acontecer principalmente por distração, pressa, inquietação ou falta de planejamento, e não por medo de abandono, vazio ou rejeição?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com TDAH",
+    text:"Além da impulsividade, você apresenta medo intenso de abandono, relacionamentos instáveis, vazio crônico, raiva intensa ou autoagressão?",
+    options:YNP
+  },
+
+  {
+    type:"radio",
+    section:"Diferencial com Trauma e Ansiedade",
+    text:"Seu medo de abandono, desconfiança, raiva ou instabilidade emocional começou principalmente após experiências de abuso, violência, bullying, negligência ou relações traumáticas?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com Trauma e Ansiedade",
+    text:"Suas crises emocionais acontecem principalmente quando algo lembra experiências traumáticas do passado?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com Trauma e Ansiedade",
+    text:"Sua instabilidade emocional ocorre mesmo quando não há lembrança traumática, ameaça real ou situação objetiva de perigo?",
+    options:YNP
+  },
+
+  {
+    type:"radio",
+    section:"Diferencial com Substâncias e Condições Médicas",
+    text:"Seu medo de abandono, instabilidade emocional, impulsividade, raiva intensa ou sensação de vazio começou ou piorou claramente após uso de álcool, drogas, estimulantes, antidepressivos, anabolizantes, corticoides ou outras substâncias?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Diferencial com Substâncias e Condições Médicas",
+    text:"Seu medo de abandono, instabilidade emocional, impulsividade, raiva intensa ou sensação de vazio começou ou piorou claramente após traumatismo craniano, convulsões, doença neurológica, alteração hormonal ou outra condição médica importante?",
+    options:YNP
+  },
+
+  {
+    type:"radio",
+    section:"Confirmação por Outra Pessoa",
+    text:"Uma pessoa próxima diria que você tem medo intenso de ser abandonado, rejeitado ou deixado por pessoas importantes?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Confirmação por Outra Pessoa",
+    text:"Uma pessoa próxima diria que seus relacionamentos costumam ser intensos, instáveis e marcados por brigas, afastamentos ou reconciliações?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Confirmação por Outra Pessoa",
+    text:"Uma pessoa próxima diria que você reage de forma muito intensa a críticas, rejeições, frustrações ou conflitos?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Confirmação por Outra Pessoa",
+    text:"Uma pessoa próxima diria que você age impulsivamente quando está com raiva, triste, vazio, rejeitado ou emocionalmente abalado?",
+    options:YNP
+  },
+  {
+    type:"radio",
+    section:"Confirmação por Outra Pessoa",
+    text:"Uma pessoa próxima diria que seu medo de abandono, instabilidade emocional, impulsividade ou raiva intensa causa prejuízo real nos seus relacionamentos, trabalho ou família?",
+    options:YNP
+  },
+
+  {
+    type:"input",
+    section:"Descrição Clínica",
+    text:"Informe sua idade quando começou a perceber medo intenso de abandono, relacionamentos instáveis, impulsividade, raiva intensa, vazio ou mudanças emocionais fortes."
+  },
+  {
+    type:"radio",
+    section:"Descrição Clínica",
+    text:"Atualmente, qual sintoma causa maior prejuízo na sua vida: medo de abandono, relacionamentos instáveis, impulsividade, autoagressão, mudanças intensas de humor, vazio, raiva ou desconfiança/desligamento em crises?",
+    options:["Medo de abandono","Relacionamentos instáveis","Impulsividade","Autoagressão ou pensamentos suicidas","Mudanças intensas de humor","Vazio crônico","Raiva intensa","Desconfiança ou desligamento em crises","Não sei"]
+  }
 ];
-
 const N = QUESTIONS.length;
 
 // ======== RENDER ========
